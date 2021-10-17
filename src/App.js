@@ -1,7 +1,7 @@
-import React from "react";
+import { Display } from "./Display";
 
 function App() {
-  return <div>Hi</div>
+    return <Display />;
 }
 
 export default App;
