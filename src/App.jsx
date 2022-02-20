@@ -7,7 +7,6 @@ function App() {
     const tableRef = useRef();
     const [selectedTicker, setSelectedTicker] = useState(null);
 
-    console.log(selectedTicker);
     return <div style={{ display: 'inline-flex' }}>
         <div>
             <PositionsTable ref={tableRef} setSelectedTicker={setSelectedTicker}/>
