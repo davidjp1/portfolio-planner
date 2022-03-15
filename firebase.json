@@ -5,7 +5,7 @@
   },
   "functions": {
     "predeploy": [
-      "npm --prefix \"$RESOURCE_DIR\" run lint"
+      "cd functions && npm install && npm run build"
     ],
     "source": "functions"
   },
