@@ -49,18 +49,25 @@ async function checkCache(symbol: string, interval: string): Promise<any> {
   if(!document.exists){
     return null;
   }
+  const data = document.data();
+  if(!data?.rawData){
+    console.warn('Found bad cache record with missing data');
+    await document.ref.delete();
+    return null;
+  }
   // Delete the cache if it is older than 1 hour
-  if(document.data()?.dateAdded.toDate().getTime() < new Date().getTime() - 3600000){
+  if(data?.dateAdded.toDate().getTime() < new Date().getTime() - 3600000){
     console.log('cleaning old cache for', symbol, interval);
     await document.ref.delete();
+    return null;
   }
+  
   console.log('retrieved from cache');
-  return document.data();
+  return JSON.parse(data.rawData);
 }
 
 async function updateCache(symbol: string, interval: string, result: any): Promise<void> {
-  const dateAdded = new Date();
-  db.collection('cache').doc(symbol).collection(interval).doc('data').set({dateAdded, ...result});
+  db.collection('cache').doc(symbol).collection(interval).doc('data').set({rawData: JSON.stringify(result), dateAdded: new Date()});
 }
 
 class HttpException extends Error {
