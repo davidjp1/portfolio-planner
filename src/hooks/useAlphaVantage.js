@@ -30,7 +30,7 @@ const useAlphaVantage = (symbol, interval, options) => {
       return;
     }
         
-    const url = `https://us-central1-powell-portfolio-tracker.cloudfunctions.net/base/vantage?&symbol=${symbol}&interval=${interval}`;
+    const url = `https://us-central1-stock-portfolio-planner.cloudfunctions.net/base/vantage?&symbol=${symbol}&interval=${interval}`;
         
     (async () => {
       try {

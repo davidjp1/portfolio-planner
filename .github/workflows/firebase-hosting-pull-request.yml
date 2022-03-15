@@ -14,4 +14,4 @@ jobs:
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_POWELL_PORTFOLIO_TRACKER }}'
-          projectId: powell-portfolio-tracker
+          projectId: stock-portfolio-planner
