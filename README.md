@@ -1,4 +1,4 @@
-# portfolio-tracker
+# portfolio-planner
 
 ## Prerequisites
 - node.js v14
