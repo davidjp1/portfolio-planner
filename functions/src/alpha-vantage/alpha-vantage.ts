@@ -59,8 +59,10 @@ async function checkCache(symbol: string, interval: string): Promise<any> {
   if(data?.dateAdded.toDate().getTime() < new Date().getTime() - 3600000){
     console.log('cleaning old cache for', symbol, interval);
     await document.ref.delete();
+    return null;
   }
-
+  
+  console.log('retrieved from cache');
   return JSON.parse(data.rawData);
 }
 
