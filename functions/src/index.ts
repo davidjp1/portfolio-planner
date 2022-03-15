@@ -14,20 +14,20 @@ const app = express();
 app.use(cors({ origin: '*' }));
 
 app.get('/vantage', (req, res) => {
-	const symbol = req.query.symbol?.toString();
-	const interval = req.query.interval?.toString();
-	const {options} = req.body;
+  const symbol = req.query.symbol?.toString();
+  const interval = req.query.interval?.toString();
+  const {options} = req.body;
 
-	if (!symbol || !interval) {
-		return res.status(400).send('symbol and interval are required');
-	}
+  if (!symbol || !interval) {
+    return res.status(400).send('symbol and interval are required');
+  }
 
-	return queryAlphaVantage(symbol, interval, options)
-		.then(data => res.status(200).send(data))
-		.catch(e => {
-			console.error(e);
-			res.status(e.code || 500).send(e.message);
-		});
+  return queryAlphaVantage(symbol, interval, options)
+    .then(data => res.status(200).send(data))
+    .catch(e => {
+      console.error(e);
+      res.status(e.code || 500).send(e.message);
+    });
 });
 
 
