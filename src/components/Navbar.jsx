@@ -7,7 +7,7 @@ function NavBar() {
 
   return <Nav align="end" direction="row" justify="end" fill="horizontal" pad="small" background={{'color':'brand'}} full>
     <Text size="xlarge" weight="bold">
-      <Link to="/" className='nostyle'>Portfolio Builder</Link >
+      <Link to="/" className='nostyle'>Portfolio Planner</Link >
     </Text>
     <Button label="My Investments" icon={<Analytics />} onClick={() => navigate('/portfolio')}/>
     <Button label="About" icon={<CircleInformation />} onClick={() => navigate('/about')}/>

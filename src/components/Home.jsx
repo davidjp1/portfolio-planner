@@ -6,7 +6,7 @@ function Home(){
 
   return <Box align="center" justify="center" pad="large">
     <Text size="5xl">
-          Portfolio Builder
+          Portfolio Planner
     </Text>
     <Box align="end" style={{marginBottom: '3vh'}}>
       <Text size="large" style={{fontStyle: 'italic'}}>
@@ -17,7 +17,7 @@ function Home(){
       </Text>
     </Box>
     <Text>
-            Portfolio builder seeks to strengthen your conviction in key decisions on your investment journey. <br/>
+    Portfolio Planner seeks to strengthen your conviction in key decisions on your investment journey. <br/>
             Build a strong thesis in your investments for the long term future of businesses in your area of competence.
     </Text>
     <Button label="Get Started" onClick={() => navigate('/portfolio')}/>
