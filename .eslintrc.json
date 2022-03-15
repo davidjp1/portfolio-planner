@@ -1,7 +1,6 @@
 {
     "ignorePatterns": ["/lib/**"],
     "env": {
-        "node": true,
         "browser": true,
         "es2021": true
     },
@@ -15,7 +14,7 @@
     },
     "rules": {
         "indent": [
-            "error",
+            "warn",
             2
         ],
         "quotes": [
@@ -26,6 +25,7 @@
             "error",
             "always"
         ],
+        "no-unused-vars": ["warn"],
         "@typescript-eslint/ban-ts-comment": "off"
     }
 }
