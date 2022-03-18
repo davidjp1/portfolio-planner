@@ -38,9 +38,9 @@ const PositionsTable = forwardRef(({initialData = [], setSelectedTicker}, ref) =
     }
   }));
 
-  return <Box style={{ height: '200px', width: '30vw' }}>
+  return <Box fill="horizontal" style={{ height: '200px'}}>
     <Button label="Add Row" onClick={() => setData(d => [...d, {}])}/>
-    <div className="ag-theme-alpine" style={{height: 400, width: 600}}>
+    <div className="ag-theme-alpine" style={{height: 400, width: '100%'}}>
       <AgGridReact rowData={data} onGridReady={onGridReady} onRowSelected={onRowSelected} rowSelection='single'>
         {columns.map(col => <AgGridColumn {...col} key={`col-${col.field}`} />)}
       </AgGridReact>

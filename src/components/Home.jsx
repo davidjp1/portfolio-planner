@@ -20,6 +20,13 @@ function Home(){
     Portfolio Planner seeks to strengthen your conviction in key decisions on your investment journey. <br/>
             Build a strong thesis in your investments for the long term future of businesses in your area of competence.
     </Text>
+    <Text>
+      <ul>
+        <li>Build a portfolio of <strong>thesis</strong> rather than <strong>stocks</strong></li>
+        <li>Set reminders to check in on your thesis when situations change</li>
+        <li>Track performance of your thesis and find patterns in your thinking</li>
+      </ul>
+    </Text>
     <Button label="Get Started" onClick={() => navigate('/portfolio')}/>
   </Box>;
 }

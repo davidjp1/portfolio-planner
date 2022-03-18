@@ -6,7 +6,7 @@ import { Select, Box } from 'grommet';
 function StockDisplay({symbol}) {
   const [interval, setInterval] = useState(INTERVALS[0]);
 
-  const {data, error} = useAlphaVantage(symbol, interval);
+  const {data, error} = useAlphaVantage('intraday',symbol, interval);
 
   if(error){
     return <h4 style={{color: 'red'}}>{error}</h4>;
@@ -16,7 +16,7 @@ function StockDisplay({symbol}) {
   }
 
 
-  return <Box pad="large">
+  return <Box pad="large" fill="horizontal">
     <Select 
       options={INTERVALS}
       value={interval}
@@ -54,7 +54,7 @@ function StockDisplay({symbol}) {
       }}
       series={[{ data }]}
       type="candlestick"
-      width="500"
+      width="100%"
     />
   </Box>;
 }
