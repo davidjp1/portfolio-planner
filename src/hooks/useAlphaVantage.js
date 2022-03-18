@@ -19,7 +19,7 @@ const INTERVAL_KEYS = {
   '1month': 'Monthly Time Series'
 };
 
-const useAlphaVantage = (symbol, interval, options) => {
+const useAlphaVantage = (endpoint, symbol, interval, options) => {
 
   const [response, setResponse] = useState();
   const [error, setError] = useState();
@@ -30,7 +30,7 @@ const useAlphaVantage = (symbol, interval, options) => {
       return;
     }
         
-    const url = `https://us-central1-stock-portfolio-planner.cloudfunctions.net/base/vantage?&symbol=${symbol}&interval=${interval}`;
+    const url = `https://us-central1-stock-portfolio-planner.cloudfunctions.net/base/vantage/${endpoint}?symbol=${symbol}${interval ? `&interval=${interval}` : ''}`;
         
     (async () => {
       try {

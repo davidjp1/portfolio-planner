@@ -5,6 +5,7 @@ import {Portfolio} from './Portfolio';
 import {Routes , Route, BrowserRouter} from 'react-router-dom';
 import {NavBar} from './Navbar';
 import {NotFound} from './NotFound';
+import {AddStock} from './AddStock';
 
 function App() {
   return <Grommet theme={theme}>
@@ -15,6 +16,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home/>}/>
             <Route path="/portfolio" element={<Portfolio/>}/>
+            <Route path="/portfolio/add" element={<AddStock/>}/>
             <Route path="*" element={<NotFound />} />
           </Routes >
         </Main>
