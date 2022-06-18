@@ -14,7 +14,7 @@ import { queryAlphaVantageIntraday, queryAlphaVantageCsvToJson, getCachedOrAlpha
 const app = express();
 app.use(cors({ origin: '*' }));
 
-app.get('/vantage/intraday', (req, res) => {
+app.get('/vantage/pricing', (req, res) => {
   const symbol = req.query.symbol?.toString();
   const interval = req.query.interval?.toString();
 

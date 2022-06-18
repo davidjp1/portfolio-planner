@@ -10,7 +10,7 @@ function Home(){
     </Text>
     <Box align="end" style={{marginBottom: '3vh'}}>
       <Text size="large" style={{fontStyle: 'italic'}}>
-                    "Charlie and I are not stock-pickers; we are business-pickers"
+                    &quot;Charlie and I are not stock-pickers; we are business-pickers&quot;
       </Text>
       <Text style={{fontStyle: 'italic'}}>
                     - Warren buffet, letter to shareholders 2021

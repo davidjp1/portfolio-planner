@@ -5,7 +5,7 @@ import {Link, useNavigate} from 'react-router-dom';
 function NavBar() {
   const navigate = useNavigate();
 
-  return <Nav align="end" direction="row" justify="end" fill="horizontal" pad="small" background={{'color':'brand'}} full>
+  return <Nav align="end" direction="row" justify="end" fill="horizontal" pad="small" background={{'color':'brand'}}>
     <Text size="xlarge" weight="bold">
       <Link to="/" className='nostyle'>Portfolio Planner</Link >
     </Text>
