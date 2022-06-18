@@ -3,7 +3,8 @@ import {AgGridColumn, AgGridReact} from 'ag-grid-react';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
-import { useState, forwardRef, useImperativeHandle, SetStateAction, Dispatch } from 'react';
+import { useState } from 'react';
+import { GridApi } from 'ag-grid-community';
 
 const columnBase = {resizable: true, editable: false};
 const columnDetails = [
@@ -11,34 +12,30 @@ const columnDetails = [
 ];
 const columns = columnDetails.map(col => ({...columnBase, ...col}));
 
+interface PositionsTableRow {
+  ticker: string
+}
+
 // Editable ag-grid to display and set trade positions
-const PositionsTable = forwardRef(({initialData = [], setSelectedTicker}: {initialData?: any[], setSelectedTicker: Dispatch<SetStateAction<string | null>>}, ref) => {
+const PositionsTable = ({initialData = [], onTickerSelected}: {initialData?: PositionsTableRow[], onTickerSelected: (ticker: string) => void}) => {
+
   const [tickerInp, setTickerInp] = useState('');
   const [data, setData] = useState(initialData);
-  const [gridApi, setGridApi] = useState<any>(null);
+  const [gridApi, setGridApi] = useState<GridApi | null>();
 
-  
-    
-  const onGridReady = ({api}: {api: any}) => {
+  const onGridReady = ({api}: {api: GridApi}) => {
     setGridApi(api);
   };
+
   const onRowSelected = () => {
     if(!gridApi){
       return;
     }
     const selectedRows = gridApi.getSelectedRows();
     if (selectedRows.length > 0) {
-      setSelectedTicker(selectedRows[0].ticker);
+      onTickerSelected(selectedRows[0].ticker);
     }
   };
-
-  useImperativeHandle(ref, () => ({
-    getTableData: () => {
-      const rowData: any[] = [];
-      gridApi.forEachNode((node: any) => rowData.push(node.data));
-      return rowData;
-    }
-  }));
 
   const addTicker = () => {
     setData(d => [...d, {ticker: tickerInp}]);
@@ -50,7 +47,7 @@ const PositionsTable = forwardRef(({initialData = [], setSelectedTicker}: {initi
         placeholder="Enter a ticker symbol"
         onChange={event => setTickerInp(event.target.value)}
       />
-      <Button label="Add Row" style={{width: '50%'}} onClick={() => addTicker()}/>
+      <Button label="Add Row" style={{width: '50%'}} onClick={addTicker}/>
     </div>
     {data.length > 0 && <div className="ag-theme-alpine" style={{height: 400, width: '100%'}}>
       <AgGridReact rowData={data} onGridReady={onGridReady} onRowSelected={onRowSelected} rowSelection='single'>
@@ -58,5 +55,5 @@ const PositionsTable = forwardRef(({initialData = [], setSelectedTicker}: {initi
       </AgGridReact>
     </div>}
   </Box>;
-});
+};
 export {PositionsTable};

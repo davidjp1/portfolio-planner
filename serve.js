@@ -1,10 +1,8 @@
-// source: https://github.com/zaydek/esbuild-hot-reload/blob/master/serve.js
 /* eslint-disable */
 const { build } = require('./build');
-// eslint-disable-line
 const chokidar = require('chokidar');
-// eslint-disable-line
-const liveServer = require('live-server');
+const servor = require('servor');
+
 const fs = require('fs');
 const path = require('path');
 
@@ -33,9 +31,11 @@ const copyRecursiveSync = function(src, dest) {
     .on('all', () => {
       builder.rebuild();
     });
-  liveServer.start({
-    open: true,
-    port: +process.env.PORT || 8080,
-    root: 'build',
-  });
+    await servor({
+      root: './build',
+      fallback: 'index.html',
+      reload: true,
+      port: 8080,
+    });
+    console.log('dev server started with hotload enabled!');
 })();

@@ -18,6 +18,10 @@ const INTERVAL_KEYS: {[displayName: string]: string} = {
   '1month': 'Monthly Adjusted Time Series'
 };
 
+interface SimpleStringObject {
+  [key: string]: string;
+}
+
 const useAlphaVantage = (endpoint: string, symbol: string, interval?: string, options?: any) => {
 
   const [response, setResponse] = useState<any>();
@@ -44,11 +48,13 @@ const useAlphaVantage = (endpoint: string, symbol: string, interval?: string, op
           console.log(json);
           if(interval === '7day' || interval === '1month'){
             result = Object.entries(json[INTERVAL_KEYS[interval]] || {})
-              ?.map(([a, b]) => [new Date(a).getTime(), Object.values(b as any).slice(4, 8)]);
+              // getting the prices for open, high, low, close, volume
+              ?.map(([dateTime, prices]) => [new Date(dateTime).getTime(), Object.values(prices as SimpleStringObject).slice(4, 8)]);
           }
           else {
             result = Object.entries(json[INTERVAL_KEYS[interval]] || {})
-              ?.map(([a, b]) => [new Date(a).getTime(), Object.values(b as any).slice(0, 4)]);
+              // getting the prices for open, high, low, close, volume
+              ?.map(([dateTime, prices]) => [new Date(dateTime).getTime(), Object.values(prices as SimpleStringObject).slice(0, 4)]);
           }
         }
         setResponse(result);
