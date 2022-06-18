@@ -34,6 +34,7 @@ const copyRecursiveSync = function(src, dest) {
       builder.rebuild();
     });
   liveServer.start({
+    spa: true,
     open: true,
     port: +process.env.PORT || 8080,
     root: 'build',
