@@ -1,8 +1,12 @@
 /* eslint-disable */
 const fs = require('fs');
 const path = require('path');
+const ejs = require('ejs');
+const { v4: uuidv4 } = require('uuid');
 
 require('dotenv').config();
+
+const buildHash = '.' + uuidv4();
 
 const copyRecursiveSync = function(src, dest) {
   const exists = fs.existsSync(src);
@@ -18,11 +22,17 @@ const copyRecursiveSync = function(src, dest) {
   }
 };
 
+const makeHtml = () => {
+  ejs.renderFile('./public/index.ejs', {buildHash}, function (err, str) {
+    if (err) console.error(err)   
+    fs.writeFileSync('./build/index.html', str)
+  });
+}
+
 const build = async (hotswap) => {
   const define = { "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV || "development") };
 
   for (const k in process.env) {
-    console.log(k);
     define[`process.env.${k}`] = JSON.stringify(process.env[k])
   }
   
@@ -40,10 +50,19 @@ const build = async (hotswap) => {
     entryPoints: ['./src/index.tsx'],
     sourcemap: true,
     minify: process.env.NODE_ENV === 'production',
-    outfile: './build/static/bundle.js',
+    outfile: `./build/static/bundle${buildHash}.js`,
     loader: {'.js': 'jsx'},
     target: ["chrome58", "edge18", "safari11", "firefox57"]
-  }).catch(() => process.exit(1));
+  })
+  .then((builder) => {
+    makeHtml();
+    return builder;
+  })
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  });
+
 };
 
 build(false);
