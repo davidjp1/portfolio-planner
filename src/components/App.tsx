@@ -1,14 +1,14 @@
 import {Grommet, Main, Box} from 'grommet';
 import {theme} from '../styles/theme';
-import {Home} from './Home';
-import {Portfolio} from './Portfolio';
+import {Home} from './pages/Home';
+import {Portfolio} from './pages/Portfolio';
 import {Routes , Route, BrowserRouter} from 'react-router-dom';
 import {NavBar} from './Navbar';
-import {NotFound} from './NotFound';
-import {AddStock} from './AddStock';
+import {NotFound} from './pages/NotFound';
+import {AddStock} from './pages/AddStock';
 
 function App() {
-  return <Grommet theme={theme}>
+  return <Grommet theme={theme as any}>
     <BrowserRouter>
       <Box fill="vertical" overflow="auto" align="center" flex="grow">
         <NavBar/>

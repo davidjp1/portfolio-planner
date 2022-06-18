@@ -10,8 +10,8 @@ const TIME_FUNCTION_MAP: {[duration: string]: string} = {
   '30min': 'TIME_SERIES_INTRADAY',
   '60min': 'TIME_SERIES_INTRADAY',
   '1day': 'TIME_SERIES_DAILY',
-  '7day': 'TIME_SERIES_WEEKLY',
-  '1month': 'TIME_SERIES_MONTHLY',
+  '7day': 'TIME_SERIES_WEEKLY_ADJUSTED',
+  '1month': 'TIME_SERIES_MONTHLY_ADJUSTED',
 };
 const isInterday = (interval: string) => interval.includes('min');
 const db = admin.firestore();
