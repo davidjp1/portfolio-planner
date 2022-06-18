@@ -1,4 +1,9 @@
 module.exports = {
+  'settings': {
+    'react': {
+      'version': 'detect',
+    }
+  },
   'ignorePatterns': ['/lib/**'],
   'env': {
     'node': true,
