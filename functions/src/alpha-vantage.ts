@@ -18,7 +18,7 @@ const db = admin.firestore();
 
 export async function queryAlphaVantageIntraday(symbol: string, interval: string, skipCache = false): Promise<any> {
   if(!Object.keys(TIME_FUNCTION_MAP).includes(interval)){
-    throw new HttpException(`Invalid interval: ${interval} Valid options: ${Object.keys(TIME_FUNCTION_MAP)}`, 404);
+    throw new HttpException(`Invalid interval: ${interval} Valid options: ${Object.keys(TIME_FUNCTION_MAP)}`, 400);
   }
   return getCachedOrAlphaVantage(symbol, TIME_FUNCTION_MAP[interval], isInterday(interval) ? `&interval=${interval}` : undefined, skipCache);
 }
