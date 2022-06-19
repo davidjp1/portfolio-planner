@@ -7,22 +7,23 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 
 const columnBase = { resizable: true, editable: false };
-const columnDetails = [
-  { field: 'ticker', headerName: 'Ticker' }
-];
-const columns = columnDetails.map(col => ({ ...columnBase, ...col }));
+const columnDetails = [{ field: 'ticker', headerName: 'Ticker' }];
+const columns = columnDetails.map((col) => ({ ...columnBase, ...col }));
 
 interface PositionsTableRow {
-  ticker: string
+  ticker: string;
 }
 
 interface Props {
-  initialData?: PositionsTableRow[]
-  onTickerSelected: (ticker: string) => void
+  initialData?: PositionsTableRow[];
+  onTickerSelected: (ticker: string) => void;
 }
 
 // Editable ag-grid to display and set trade positions
-const PositionsTable: FunctionComponent<Props> = ({ initialData = [], onTickerSelected }) => {
+const PositionsTable: FunctionComponent<Props> = ({
+  initialData = [],
+  onTickerSelected,
+}) => {
   const [tickerInp, setTickerInp] = useState('');
   const [data, setData] = useState(initialData);
   const [gridApi, setGridApi] = useState<GridApi | null>();
@@ -42,7 +43,7 @@ const PositionsTable: FunctionComponent<Props> = ({ initialData = [], onTickerSe
   };
 
   const addTicker = () => {
-    setData(d => [...d, { ticker: tickerInp }]);
+    setData((d) => [...d, { ticker: tickerInp }]);
   };
 
   return (
@@ -50,14 +51,21 @@ const PositionsTable: FunctionComponent<Props> = ({ initialData = [], onTickerSe
       <div style={{ display: 'flex' }}>
         <TextInput
           placeholder="Enter a ticker symbol"
-          onChange={event => setTickerInp(event.target.value)}
+          onChange={(event) => setTickerInp(event.target.value)}
         />
         <Button label="Add Row" style={{ width: '50%' }} onClick={addTicker} />
       </div>
       {data.length > 0 && (
         <div className="ag-theme-alpine" style={{ height: 400, width: '100%' }}>
-          <AgGridReact rowData={data} onGridReady={onGridReady} onRowSelected={onRowSelected} rowSelection='single'>
-            {columns.map(col => <AgGridColumn {...col} key={`col-${col.field}`} />)}
+          <AgGridReact
+            rowData={data}
+            onGridReady={onGridReady}
+            onRowSelected={onRowSelected}
+            rowSelection="single"
+          >
+            {columns.map((col) => (
+              <AgGridColumn {...col} key={`col-${col.field}`} />
+            ))}
           </AgGridReact>
         </div>
       )}

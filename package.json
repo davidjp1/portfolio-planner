@@ -32,9 +32,13 @@
     "esbuild": "^0.14.45",
     "esbuild-jest": "^0.5.0",
     "eslint": "^8.18.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-react": "^7.30.0",
+    "husky": "^8.0.1",
     "jest": "28.1.1",
     "jest-environment-jsdom": "^28.1.1",
+    "lint-staged": "^13.0.2",
+    "prettier": "2.7.1",
     "servor": "^4.0.2"
   },
   "scripts": {
@@ -42,7 +46,8 @@
     "build": "node build.js",
     "build:watch": "tsc -w",
     "test": "jest",
-    "lint": "eslint --ext .js,.ts,.tsx,.tsx src/"
+    "lint": "eslint --ext .js,.ts,.tsx,.tsx src/",
+    "prepare": "husky install"
   },
   "eslintConfig": {
     "extends": [
@@ -61,5 +66,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx,tsx}": "eslint --cache --fix",
+    "*.{js,css,md}": "prettier --write"
   }
 }

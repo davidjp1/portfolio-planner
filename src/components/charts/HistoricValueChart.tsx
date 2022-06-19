@@ -10,13 +10,18 @@ interface HistoricDataPoint {
 }
 
 interface Props {
-  ticker: string
-  displayName: string
-  endpoint: string
-  attributeExtractor: (data: any) => HistoricDataPoint[]
+  ticker: string;
+  displayName: string;
+  endpoint: string;
+  attributeExtractor: (data: any) => HistoricDataPoint[];
 }
 
-const HistoricValueWidget: FunctionComponent<Props> = ({ ticker, displayName, endpoint, attributeExtractor }) => {
+const HistoricValueWidget: FunctionComponent<Props> = ({
+  ticker,
+  displayName,
+  endpoint,
+  attributeExtractor,
+}) => {
   const { data, error } = useAlphaVantage(endpoint, ticker);
   const historicalValues = attributeExtractor(data);
 
@@ -30,14 +35,16 @@ const HistoricValueWidget: FunctionComponent<Props> = ({ ticker, displayName, en
 
   return (
     <div>
-      <Text size='large'>{displayName}</Text>
+      <Text size="large">{displayName}</Text>
       <Chart
         options={{
           xaxis: {
-            categories: historicalValues.map(a => a.date),
-          }
+            categories: historicalValues.map((a) => a.date),
+          },
         }}
-        series={[{ name: displayName, data: historicalValues.map(a => a.value) }]}
+        series={[
+          { name: displayName, data: historicalValues.map((a) => a.value) },
+        ]}
         type="line"
       />
     </div>
