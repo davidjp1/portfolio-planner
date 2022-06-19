@@ -2,7 +2,7 @@
 const { build } = require('./build');
 const chokidar = require('chokidar');
 const servor = require('servor');
-
+const openBrowser = require('servor/utils/openBrowser');
 const fs = require('fs');
 const path = require('path');
 
@@ -28,16 +28,20 @@ const copyRecursiveSync = function (src, dest) {
   const builder = await build(true);
   chokidar
     .watch('./src/**/*.{js,jsx,ts,tsx,html}', {
-      interval: 0,
+      ignoreInitial: true,
+      interval: 100,
     })
     .on('all', () => {
       builder.rebuild();
     });
+  const port = +process.env.PORT || 8080;
   await servor({
     root: './build',
     fallback: 'index.html',
     reload: true,
-    port: 8080,
+    browse: true,
+    port,
   });
-  console.log('dev server started with hotload enabled!');
+  openBrowser(`http://localhost:${port}`);
+  console.log(`dev server started on ${port} with hotload enabled!`);
 })();
