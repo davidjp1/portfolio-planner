@@ -18,19 +18,14 @@ const INTERVAL_KEYS: {[displayName: string]: string} = {
   '1month': 'Monthly Adjusted Time Series'
 };
 
-interface SimpleStringObject {
-  [key: string]: string;
-}
-
 const useAlphaVantage = (endpoint: string, symbol: string, interval?: string, options?: any) => {
-
   const [response, setResponse] = useState<any>();
   const [error, setError] = useState<string | undefined>();
 
   useEffect(() => {
     setError(undefined);
     setResponse(undefined);
-    if(!symbol) {
+    if (!symbol) {
       return;
     }
         
@@ -40,25 +35,27 @@ const useAlphaVantage = (endpoint: string, symbol: string, interval?: string, op
       try {
         const res = await fetch(url, options);
         const json = await res.json();
+
         if (!is2xx(res.status)) {
           setError(`${url} responded with status code=${res.status}`);
+          return;
         }
+
         let result = json;
-        if(interval){
+        if (interval) {
           console.log(json);
-          if(interval === '7day' || interval === '1month'){
+          if (interval === '7day' || interval === '1month') {
             result = Object.entries(json[INTERVAL_KEYS[interval]] || {})
               // getting the prices for open, high, low, close, volume
-              ?.map(([dateTime, prices]) => [new Date(dateTime).getTime(), Object.values(prices as SimpleStringObject).slice(4, 8)]);
-          }
-          else {
+              .map(([dateTime, prices]) => [new Date(dateTime).getTime(), Object.values(prices as Record<string, string>).slice(4, 8)]);
+          } else {
             result = Object.entries(json[INTERVAL_KEYS[interval]] || {})
               // getting the prices for open, high, low, close, volume
-              ?.map(([dateTime, prices]) => [new Date(dateTime).getTime(), Object.values(prices as SimpleStringObject).slice(0, 4)]);
+              .map(([dateTime, prices]) => [new Date(dateTime).getTime(), Object.values(prices as Record<string, string>).slice(0, 4)]);
           }
         }
         setResponse(result);
-      }catch(e){
+      } catch(e) {
         console.error(e);
         setError('failed to get data from alpha vantage');
       }
