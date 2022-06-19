@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Nav, Text, Button } from 'grommet';
 import { Analytics, CircleInformation } from 'grommet-icons';
 
-function NavBar() {
+const NavBar = () => {
   const navigate = useNavigate();
 
   return (
@@ -14,5 +14,5 @@ function NavBar() {
       <Button label="About" icon={<CircleInformation />} onClick={() => navigate('/about')} />
     </Nav>
   );
-}
+};
 export { NavBar };
