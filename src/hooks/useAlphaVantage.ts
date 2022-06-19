@@ -7,7 +7,7 @@ const INTERVALS = [...MINUTE_INTERVALS, '1day', '7day', '1month'];
 
 const isInterday = (interval: string) => MINUTE_INTERVALS.includes(interval);
 
-const INTERVAL_KEYS: {[displayName: string]: string} = {
+const INTERVAL_KEYS: { [displayName: string]: string } = {
   '1min': 'Time Series (1min)',
   '5min': 'Time Series (5min)',
   '15min': 'Time Series (15min)',
@@ -15,10 +15,15 @@ const INTERVAL_KEYS: {[displayName: string]: string} = {
   '60min': 'Time Series (60min)',
   '1day': 'Time Series (Daily)',
   '7day': 'Weekly Adjusted Time Series',
-  '1month': 'Monthly Adjusted Time Series'
+  '1month': 'Monthly Adjusted Time Series',
 };
 
-const useAlphaVantage = (endpoint: string, symbol: string, interval?: string, options?: any) => {
+const useAlphaVantage = (
+  endpoint: string,
+  symbol: string,
+  interval?: string,
+  options?: any
+) => {
   const [response, setResponse] = useState<any>();
   const [error, setError] = useState<string | undefined>();
 
@@ -28,9 +33,13 @@ const useAlphaVantage = (endpoint: string, symbol: string, interval?: string, op
     if (!symbol) {
       return;
     }
-        
-    const url = `${process.env.REACT_APP_FUNCTIONS_URL}/base/vantage/${endpoint}?symbol=${symbol}${interval ? `&interval=${interval}` : ''}`;
-        
+
+    const url = `${
+      process.env.REACT_APP_FUNCTIONS_URL
+    }/base/vantage/${endpoint}?symbol=${symbol}${
+      interval ? `&interval=${interval}` : ''
+    }`;
+
     (async () => {
       try {
         const res = await fetch(url, options);
@@ -47,21 +56,27 @@ const useAlphaVantage = (endpoint: string, symbol: string, interval?: string, op
           if (interval === '7day' || interval === '1month') {
             result = Object.entries(json[INTERVAL_KEYS[interval]] || {})
               // getting the prices for open, high, low, close, volume
-              .map(([dateTime, prices]) => [new Date(dateTime).getTime(), Object.values(prices as Record<string, string>).slice(4, 8)]);
+              .map(([dateTime, prices]) => [
+                new Date(dateTime).getTime(),
+                Object.values(prices as Record<string, string>).slice(4, 8),
+              ]);
           } else {
             result = Object.entries(json[INTERVAL_KEYS[interval]] || {})
               // getting the prices for open, high, low, close, volume
-              .map(([dateTime, prices]) => [new Date(dateTime).getTime(), Object.values(prices as Record<string, string>).slice(0, 4)]);
+              .map(([dateTime, prices]) => [
+                new Date(dateTime).getTime(),
+                Object.values(prices as Record<string, string>).slice(0, 4),
+              ]);
           }
         }
         setResponse(result);
-      } catch(e) {
+      } catch (e) {
         console.error(e);
         setError('failed to get data from alpha vantage');
       }
     })();
   }, [symbol, interval, options]);
-    
+
   return { data: response, error };
 };
 

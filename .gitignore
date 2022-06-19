@@ -34,3 +34,5 @@ logs.txt
 
 # coverage reports
 **/coverage/**/*
+
+.eslintcache

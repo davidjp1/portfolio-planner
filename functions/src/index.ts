@@ -3,13 +3,17 @@ import * as admin from 'firebase-admin';
 import express from 'express';
 import cors from 'cors';
 import { RuntimeOptions } from 'firebase-functions';
-import {Request, Response} from 'express';
+import { Request, Response } from 'express';
 
 admin.initializeApp();
 
 // needs to be imported after initalizing App
 // eslint-disable-next-line
-import { queryAlphaVantageIntraday, queryAlphaVantageCsvToJson, getCachedOrAlphaVantage } from './alpha-vantage';
+import {
+  queryAlphaVantageIntraday,
+  queryAlphaVantageCsvToJson,
+  getCachedOrAlphaVantage,
+} from './alpha-vantage';
 
 const app = express();
 app.use(cors({ origin: '*' }));
@@ -30,7 +34,10 @@ app.get('/vantage/fundamentals/earningsCalendar', (req, res) => {
   if (!symbol) {
     return res.status(400).send('symbol is required');
   }
-  return genericErrorHandler(queryAlphaVantageCsvToJson(symbol, 'EARNINGS_CALENDAR'), res);
+  return genericErrorHandler(
+    queryAlphaVantageCsvToJson(symbol, 'EARNINGS_CALENDAR'),
+    res
+  );
 });
 
 app.get('/vantage/fundamentals/incomeStatement', (req, res) => {
@@ -53,8 +60,11 @@ app.get('/vantage/fundamentals/overview', (req, res) => {
   handleGenericAlphaVantageReq(req, res, 'OVERVIEW');
 });
 
-
-function handleGenericAlphaVantageReq(req: Request<any>, res: Response<any>, avFunction: string) {
+function handleGenericAlphaVantageReq(
+  req: Request<any>,
+  res: Response<any>,
+  avFunction: string
+) {
   const symbol = req.query.symbol?.toString();
   if (!symbol) {
     return res.status(400).send('symbol is required');
@@ -63,12 +73,14 @@ function handleGenericAlphaVantageReq(req: Request<any>, res: Response<any>, avF
 }
 
 function genericErrorHandler(promise: Promise<any>, res: Response<any>) {
-  return promise.then(data => res.status(200).send(data))
-    .catch(e => {
+  return promise
+    .then((data) => res.status(200).send(data))
+    .catch((e) => {
       console.error(e);
       res.status(e.code || 500).send(e.message);
     });
 }
 
-
-exports.base = functions.runWith({ secrets: ['ALPHA_VANTAGE_KEY'] } as RuntimeOptions).https.onRequest(app);
+exports.base = functions
+  .runWith({ secrets: ['ALPHA_VANTAGE_KEY'] } as RuntimeOptions)
+  .https.onRequest(app);

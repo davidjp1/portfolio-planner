@@ -4,21 +4,13 @@
     "indexes": "firestore.indexes.json"
   },
   "functions": {
-    "predeploy": [
-      "cd functions && npm install && npm run build"
-    ],
+    "predeploy": ["cd functions && npm install && npm run build"],
     "source": "functions"
   },
   "hosting": {
-    "predeploy": [
-      "npm ci && npm run build"
-    ],
+    "predeploy": ["npm ci && npm run build"],
     "public": "build",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
         "source": "**",

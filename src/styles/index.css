@@ -12,7 +12,9 @@ code {
     monospace;
 }
 
-a.nostyle, a.nostyle:link, a.nostyle:visited {
+a.nostyle,
+a.nostyle:link,
+a.nostyle:visited {
   text-decoration: inherit;
   color: inherit;
 }
