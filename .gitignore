@@ -31,3 +31,6 @@ firebase-debug.log
 ui-debug.log
 .firebase
 logs.txt
+
+# coverage reports
+**/coverage/**/*

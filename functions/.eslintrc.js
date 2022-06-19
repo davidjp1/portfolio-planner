@@ -1,4 +1,14 @@
 module.exports = {
+  'overrides': [
+    {
+      'files': [
+        '**/*.test.*'
+      ],
+      'env': {
+        'jest': true,
+      }
+    }
+  ],
   'ignorePatterns': ['/lib/**'],
   'env': {
     'node': true,
