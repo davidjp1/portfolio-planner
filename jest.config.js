@@ -8,6 +8,9 @@ const React = require('react');
 module.exports = {
   clearMocks: true,
   collectCoverage: true,
+  'collectCoverageFrom': [
+    'src/**/*.tsx','src/**/*.ts','src/**/*.jsx','src/**/*.js'
+  ],
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',
   globals: {React},
