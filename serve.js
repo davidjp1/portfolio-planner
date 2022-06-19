@@ -43,5 +43,7 @@ const copyRecursiveSync = function (src, dest) {
     port,
   });
   openBrowser(`http://localhost:${port}`);
-  console.log(`dev server started on ${port} with hotload enabled!`);
+  console.log(
+    `dev server started on http://localhost:${port} with hotload enabled!`
+  );
 })();
