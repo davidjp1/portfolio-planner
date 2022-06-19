@@ -1,4 +1,6 @@
 # portfolio-planner
+[https://stock-portfolio-planner.web.app/](https://stock-portfolio-planner.web.app/)
+
 
 ## Prerequisites
 
