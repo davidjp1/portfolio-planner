@@ -1,9 +1,11 @@
-import {Box} from 'grommet';
+import { Box } from 'grommet';
 
 const AddStock = () => {
-  return <Box pad="large" fill="horizontal">
+  return (
+    <Box pad="large" fill="horizontal">
       Add stock
-  </Box>;
+    </Box>
+  );
 };
 
-export {AddStock};
+export { AddStock };

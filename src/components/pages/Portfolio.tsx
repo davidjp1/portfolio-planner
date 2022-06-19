@@ -1,15 +1,18 @@
-import {useState} from 'react';
-import { PositionsTable } from '../PositionsTable';
-import {StockDisplay} from '../StockDisplay';
-import {Grid} from 'grommet';
+import { useState } from 'react';
+import { Grid } from 'grommet';
 
-function Portfolio() {
+import { PositionsTable } from '../PositionsTable';
+import { StockDisplay } from '../StockDisplay';
+
+const Portfolio = () => {
   const [selectedTicker, setSelectedTicker] = useState<string | null>(null);
 
-  
-  return <Grid pad="large">
-    <PositionsTable onTickerSelected={setSelectedTicker}/>    
-    {selectedTicker !== null && <StockDisplay symbol={selectedTicker}/>}
-  </Grid>;
-}
-export {Portfolio};
+  return (
+    <Grid pad="large">
+      <PositionsTable onTickerSelected={setSelectedTicker} />
+      {selectedTicker !== null && <StockDisplay symbol={selectedTicker} />}
+    </Grid>
+  );
+};
+
+export { Portfolio };
