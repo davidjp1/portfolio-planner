@@ -1,8 +1,8 @@
 /* eslint-disable */
 const { build } = require('./build');
 const chokidar = require('chokidar');
-const servor = require('servor');
-const openBrowser = require('servor/utils/openBrowser');
+const { startDevServer } = require('@web/dev-server');
+const { esbuildPlugin } = require('@web/dev-server-esbuild');
 const fs = require('fs');
 const path = require('path');
 
@@ -24,7 +24,7 @@ const copyRecursiveSync = function (src, dest) {
 
 (async () => {
   copyRecursiveSync('./public', './build');
-  fs.copyFileSync;
+
   const builder = await build(true);
   chokidar
     .watch('./src/**/*.{js,jsx,ts,tsx,html}', {
@@ -35,15 +35,15 @@ const copyRecursiveSync = function (src, dest) {
       builder.rebuild();
     });
   const port = +process.env.PORT || 8080;
-  await servor({
-    root: './build',
-    fallback: 'index.html',
-    reload: true,
-    browse: true,
-    port,
+  await startDevServer({
+    config: {
+      appIndex: './build/index.html',
+      rootDir: './build',
+      plugins: [esbuildPlugin({ ts: true, target: 'auto' })],
+      watch: true,
+      clearTerminalOnReload: true,
+      open: true,
+      port,
+    },
   });
-  openBrowser(`http://localhost:${port}`);
-  console.log(
-    `dev server started on http://localhost:${port} with hotload enabled!`
-  );
 })();

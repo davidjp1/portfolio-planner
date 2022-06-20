@@ -52,22 +52,12 @@ const useAlphaVantage = (
 
         let result = json;
         if (interval) {
-          console.log(json);
-          if (interval === '7day' || interval === '1month') {
-            result = Object.entries(json[INTERVAL_KEYS[interval]] || {})
-              // getting the prices for open, high, low, close, volume
-              .map(([dateTime, prices]) => [
-                new Date(dateTime).getTime(),
-                Object.values(prices as Record<string, string>).slice(4, 8),
-              ]);
-          } else {
-            result = Object.entries(json[INTERVAL_KEYS[interval]] || {})
-              // getting the prices for open, high, low, close, volume
-              .map(([dateTime, prices]) => [
-                new Date(dateTime).getTime(),
-                Object.values(prices as Record<string, string>).slice(0, 4),
-              ]);
-          }
+          result = Object.entries(json[INTERVAL_KEYS[interval]] || {})
+            // getting the prices for open, high, low, close, volume
+            .map(([dateTime, prices]) => [
+              new Date(dateTime).getTime(),
+              Object.values(prices as Record<string, string>).slice(0, 4),
+            ]);
         }
         setResponse(result);
       } catch (e) {

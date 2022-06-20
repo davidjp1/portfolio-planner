@@ -1,5 +1,5 @@
 import { FunctionComponent } from 'react';
-import { Box } from 'grommet';
+import { Box, Card, CardBody, CardHeader, Heading } from 'grommet';
 
 import { PricingChart } from './charts/PricingChart';
 import { HistoricValueWidget } from './charts/HistoricValueChart';
@@ -50,45 +50,62 @@ interface Props {
   symbol: string;
 }
 
+const LabelledCard: FunctionComponent<{ title: string }> = ({
+  title,
+  children,
+}) => (
+  <Card background="light-1">
+    <CardHeader pad="xsmall">
+      <Heading level="4">{title}</Heading>
+    </CardHeader>
+    <CardBody pad="xsmall">{children}</CardBody>
+  </Card>
+);
+
+const WIDGETS = [
+  {
+    displayName: 'Historic EPS',
+    endpoint: 'fundamentals/earnings',
+    attributeExtractor: epsExtractor,
+  },
+  {
+    displayName: 'Shares outstanding',
+    endpoint: 'fundamentals/balanceSheet',
+    attributeExtractor: sharesOutstandingExtractor,
+  },
+  {
+    displayName: 'Debt',
+    endpoint: 'fundamentals/balanceSheet',
+    attributeExtractor: debtExtractor,
+  },
+  {
+    displayName:
+      'EBITDA (Earnings before interest, taxes, debt and appreciation)',
+    endpoint: 'fundamentals/incomeStatement',
+    attributeExtractor: ebitaExtractor,
+  },
+];
+
 const StockDisplay: FunctionComponent<Props> = ({ symbol }) => {
   return (
-    <Box pad="large" fill="horizontal">
+    <Box pad="xsmall" fill="horizontal">
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: '45% 45%',
-          gap: '100px',
+          gridGap: '30px',
+          gridTemplateColumns: 'repeat(auto-fill, max(300px, 32%))',
+          justifyContent: 'center',
         }}
       >
-        <PricingChart ticker={symbol} />
+        <LabelledCard title={'Stock Price'}>
+          <PricingChart ticker={symbol} />
+        </LabelledCard>
 
-        <HistoricValueWidget
-          ticker={symbol}
-          displayName="Historic EPS"
-          endpoint="fundamentals/earnings"
-          attributeExtractor={epsExtractor}
-        />
-
-        <HistoricValueWidget
-          ticker={symbol}
-          displayName="Shares outstanding"
-          endpoint="fundamentals/balanceSheet"
-          attributeExtractor={sharesOutstandingExtractor}
-        />
-
-        <HistoricValueWidget
-          ticker={symbol}
-          displayName="Debt"
-          endpoint="fundamentals/balanceSheet"
-          attributeExtractor={debtExtractor}
-        />
-
-        <HistoricValueWidget
-          ticker={symbol}
-          displayName="EBITDA (Earnings before interest, taxes, debt and appreciation)"
-          endpoint="fundamentals/incomeStatement"
-          attributeExtractor={ebitaExtractor}
-        />
+        {WIDGETS.map((widget) => (
+          <LabelledCard key={widget.displayName} title={widget.displayName}>
+            <HistoricValueWidget ticker={symbol} {...widget} />
+          </LabelledCard>
+        ))}
       </div>
     </Box>
   );

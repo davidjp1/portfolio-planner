@@ -8,7 +8,7 @@ const Portfolio = () => {
   const [selectedTicker, setSelectedTicker] = useState<string | null>(null);
 
   return (
-    <Grid pad="large">
+    <Grid pad="small">
       <PositionsTable onTickerSelected={setSelectedTicker} />
       {selectedTicker !== null && <StockDisplay symbol={selectedTicker} />}
     </Grid>

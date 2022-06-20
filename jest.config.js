@@ -15,6 +15,7 @@ module.exports = {
     'src/**/*.js',
   ],
   coverageDirectory: 'coverage',
+  testPathIgnorePatterns: ['functions'],
   coverageProvider: 'v8',
   globals: { React },
   testEnvironment: 'jsdom',
