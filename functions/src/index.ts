@@ -1,64 +1,90 @@
 import * as functions from 'firebase-functions';
-import { initializeApp } from 'firebase-admin/app';
+import { initializeApp } from 'firebase-admin';
 import express from 'express';
 import cors from 'cors';
-import { RuntimeOptions } from 'firebase-functions';
 import { Request, Response } from 'express';
-
-initializeApp();
-
-// needs to be imported after initalizing App
-// eslint-disable-next-line
 import {
   queryAlphaVantageIntraday,
   queryAlphaVantageCsvToJson,
   getCachedOrAlphaVantage,
 } from './alpha-vantage';
 
+initializeApp();
+
 const app = express();
 app.use(cors({ origin: '*' }));
 
-app.get('/vantage/pricing', (req, res) => {
-  const symbol = req.query.symbol?.toString();
-  const interval = req.query.interval?.toString();
+interface AlphaVantageReq {
+  symbol: string;
+  interval?: string;
+}
+type AlphaVantageRes = any;
 
-  if (!symbol || !interval) {
-    return res.status(400).send('symbol and interval are required');
+app.get(
+  '/vantage/pricing',
+  (req: Request<AlphaVantageReq>, res: Response<AlphaVantageRes>) => {
+    const symbol = req.query.symbol?.toString();
+    const interval = req.query.interval?.toString();
+
+    if (!symbol || !interval) {
+      return res.status(400).send('symbol and interval are required');
+    }
+
+    return genericErrorHandler(
+      queryAlphaVantageIntraday(symbol, interval),
+      res
+    );
   }
+);
 
-  return genericErrorHandler(queryAlphaVantageIntraday(symbol, interval), res);
-});
-
-app.get('/vantage/fundamentals/earningsCalendar', (req, res) => {
-  const symbol = req.query.symbol?.toString();
-  if (!symbol) {
-    return res.status(400).send('symbol is required');
+app.get(
+  '/vantage/fundamentals/earningsCalendar',
+  (req: Request<AlphaVantageReq>, res: Response<AlphaVantageRes>) => {
+    const symbol = req.query.symbol?.toString();
+    if (!symbol) {
+      return res.status(400).send('symbol is required');
+    }
+    return genericErrorHandler(
+      queryAlphaVantageCsvToJson(symbol, 'EARNINGS_CALENDAR'),
+      res
+    );
   }
-  return genericErrorHandler(
-    queryAlphaVantageCsvToJson(symbol, 'EARNINGS_CALENDAR'),
-    res
-  );
-});
+);
 
-app.get('/vantage/fundamentals/incomeStatement', (req, res) => {
-  handleGenericAlphaVantageReq(req, res, 'INCOME_STATEMENT');
-});
+app.get(
+  '/vantage/fundamentals/incomeStatement',
+  (req: Request<AlphaVantageReq>, res: Response<AlphaVantageRes>) => {
+    handleGenericAlphaVantageReq(req, res, 'INCOME_STATEMENT');
+  }
+);
 
-app.get('/vantage/fundamentals/balanceSheet', (req, res) => {
-  handleGenericAlphaVantageReq(req, res, 'BALANCE_SHEET');
-});
+app.get(
+  '/vantage/fundamentals/balanceSheet',
+  (req: Request<AlphaVantageReq>, res: Response<AlphaVantageRes>) => {
+    handleGenericAlphaVantageReq(req, res, 'BALANCE_SHEET');
+  }
+);
 
-app.get('/vantage/fundamentals/cashflows', (req, res) => {
-  handleGenericAlphaVantageReq(req, res, 'CASH_FLOW');
-});
+app.get(
+  '/vantage/fundamentals/cashflows',
+  (req: Request<AlphaVantageReq>, res: Response<AlphaVantageRes>) => {
+    handleGenericAlphaVantageReq(req, res, 'CASH_FLOW');
+  }
+);
 
-app.get('/vantage/fundamentals/earnings', (req, res) => {
-  handleGenericAlphaVantageReq(req, res, 'EARNINGS');
-});
+app.get(
+  '/vantage/fundamentals/earnings',
+  (req: Request<AlphaVantageReq>, res: Response<AlphaVantageRes>) => {
+    handleGenericAlphaVantageReq(req, res, 'EARNINGS');
+  }
+);
 
-app.get('/vantage/fundamentals/overview', (req, res) => {
-  handleGenericAlphaVantageReq(req, res, 'OVERVIEW');
-});
+app.get(
+  '/vantage/fundamentals/overview',
+  (req: Request<AlphaVantageReq>, res: Response<AlphaVantageRes>) => {
+    handleGenericAlphaVantageReq(req, res, 'OVERVIEW');
+  }
+);
 
 function handleGenericAlphaVantageReq(
   req: Request<any>,
@@ -82,5 +108,5 @@ function genericErrorHandler(promise: Promise<any>, res: Response<any>) {
 }
 
 exports.base = functions
-  .runWith({ secrets: ['ALPHA_VANTAGE_KEY'] } as RuntimeOptions)
+  .runWith({ secrets: ['ALPHA_VANTAGE_KEY'] })
   .https.onRequest(app);

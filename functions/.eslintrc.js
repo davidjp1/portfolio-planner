@@ -4,6 +4,8 @@ module.exports = {
       files: ['**/*.test.*'],
       env: {
         jest: true,
+        node: true,
+        es2021: true,
       },
     },
   ],
@@ -20,6 +22,7 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',
   },
 };
