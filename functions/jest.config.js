@@ -12,7 +12,8 @@ module.exports = {
     'src/**/*.jsx',
     'src/**/*.js',
   ],
-  coverageDirectory: 'coverage',
+  moduleDirectories: ['node_modules'],
+  testPathIgnorePatterns: ['lib'],
   coverageProvider: 'v8',
   globals: {},
   // A map from regular expressions to paths to transformers

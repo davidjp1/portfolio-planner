@@ -1,4 +1,4 @@
-import * as admin from 'firebase-admin';
+import { getFirestore } from 'firebase-admin/firestore';
 import axios from 'axios';
 import { HttpException } from './http-exception';
 import { parse as parseCsv } from 'papaparse';
@@ -14,7 +14,6 @@ const TIME_FUNCTION_MAP: { [duration: string]: string } = {
   '1month': 'TIME_SERIES_MONTHLY_ADJUSTED',
 };
 const isInterday = (interval: string) => interval.includes('min');
-const db = admin.firestore();
 
 export async function queryAlphaVantageIntraday(
   symbol: string,
@@ -120,7 +119,7 @@ async function checkCache(
   avFunction: string,
   additionalParams?: string
 ): Promise<any> {
-  const document = await db
+  const document = await getFirestore()
     .collection('cache')
     .doc(symbol)
     .collection(avFunction)
@@ -152,7 +151,8 @@ async function updateCache(
   result: any,
   additionalParams?: string
 ): Promise<void> {
-  db.collection('cache')
+  getFirestore()
+    .collection('cache')
     .doc(symbol)
     .collection(avFunction)
     .doc(additionalParams || 'result')
