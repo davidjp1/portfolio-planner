@@ -1,5 +1,5 @@
 import * as functions from 'firebase-functions';
-import { initializeApp } from 'firebase-admin';
+import * as admin from 'firebase-admin';
 import express from 'express';
 import cors from 'cors';
 import { Request, Response } from 'express';
@@ -9,7 +9,7 @@ import {
   getCachedOrAlphaVantage,
 } from './alpha-vantage';
 
-initializeApp();
+admin.initializeApp();
 
 const app = express();
 app.use(cors({ origin: '*' }));
