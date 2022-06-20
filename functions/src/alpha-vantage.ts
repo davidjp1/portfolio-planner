@@ -1,4 +1,4 @@
-import { getFirestore } from 'firebase-admin/firestore';
+import { getFirestore } from 'firebase/firestore';
 import axios from 'axios';
 import { HttpException } from './http-exception';
 import { parse as parseCsv } from 'papaparse';
