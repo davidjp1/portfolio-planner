@@ -1,11 +1,11 @@
 import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
+import { initializeApp } from 'firebase-admin/app';
 import express from 'express';
 import cors from 'cors';
 import { RuntimeOptions } from 'firebase-functions';
 import { Request, Response } from 'express';
 
-admin.initializeApp();
+initializeApp();
 
 // needs to be imported after initalizing App
 // eslint-disable-next-line

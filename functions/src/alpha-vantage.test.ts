@@ -1,7 +1,7 @@
 import { queryAlphaVantageIntraday } from './alpha-vantage';
 import { HttpException } from './http-exception';
 
-jest.mock('firebase-admin', () => ({ firestore: jest.fn() }));
+jest.mock('firebase-admin/firestore', () => ({ getFirestore: jest.fn() }));
 
 test('throws on invalid time series choice', async () => {
   let error: HttpException | null = null;
