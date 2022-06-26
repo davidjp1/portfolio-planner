@@ -4,7 +4,8 @@ const path = require('path');
 const ejs = require('ejs');
 const { v4: uuidv4 } = require('uuid');
 
-require('dotenv').config();
+require('dotenv').config({ path: '.env' });
+require('dotenv').config({ path: '.env.local' });
 
 const buildHash = '.' + uuidv4();
 
@@ -39,7 +40,9 @@ const build = async (hotswap) => {
   };
 
   for (const k in process.env) {
-    define[`process.env.${k}`] = JSON.stringify(process.env[k]);
+    if (k.startsWith('REACT_APP_')) {
+      define[`process.env.${k}`] = JSON.stringify(process.env[k]);
+    }
   }
 
   if (fs.existsSync('./build'))

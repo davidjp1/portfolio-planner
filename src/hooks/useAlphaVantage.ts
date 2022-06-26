@@ -25,7 +25,7 @@ const useAlphaVantage = (
   options?: any
 ) => {
   const [response, setResponse] = useState<any>();
-  const [error, setError] = useState<string | undefined>();
+  const [error, setError] = useState<string>();
 
   useEffect(() => {
     setError(undefined);
