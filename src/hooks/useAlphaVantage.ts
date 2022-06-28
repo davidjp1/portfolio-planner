@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useUser } from '../components/context/UserContextProvider';
 
 const is2xx = (status: number) => status >= 200 && status <= 299;
 
@@ -21,11 +22,12 @@ const INTERVAL_KEYS: { [displayName: string]: string } = {
 const useAlphaVantage = (
   endpoint: string,
   symbol: string,
-  interval?: string,
-  options?: any
+  interval?: string
 ) => {
   const [response, setResponse] = useState<any>();
-  const [error, setError] = useState<string | undefined>();
+  const [error, setError] = useState<string>();
+
+  const { user } = useUser();
 
   useEffect(() => {
     setError(undefined);
@@ -41,8 +43,15 @@ const useAlphaVantage = (
     }`;
 
     (async () => {
+      if (!user) {
+        setError('Not logged in');
+        return;
+      }
+
       try {
-        const res = await fetch(url, options);
+        const res = await fetch(url, {
+          headers: [['Authorization', `Bearer ${await user.getIdToken()}`]],
+        });
         const json = await res.json();
 
         if (!is2xx(res.status)) {
@@ -65,7 +74,7 @@ const useAlphaVantage = (
         setError('failed to get data from alpha vantage');
       }
     })();
-  }, [symbol, interval, options]);
+  }, [symbol, interval, user]);
 
   return { data: response, error };
 };

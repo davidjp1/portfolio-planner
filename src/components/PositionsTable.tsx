@@ -51,7 +51,7 @@ const PositionsTable: FunctionComponent<Props> = ({
       <div style={{ display: 'flex' }}>
         <TextInput
           placeholder="Enter a ticker symbol"
-          onChange={(event) => setTickerInp(event.target.value)}
+          onChange={(event) => setTickerInp(event.target.value.toUpperCase())}
         />
         <Button label="Add Row" style={{ width: '50%' }} onClick={addTicker} />
       </div>

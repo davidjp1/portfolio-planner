@@ -1,5 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
+
+import { getAuth } from 'firebase-admin/auth';
 import express from 'express';
 import cors from 'cors';
 import { Request, Response } from 'express';
@@ -8,11 +10,76 @@ import {
   queryAlphaVantageCsvToJson,
   getCachedOrAlphaVantage,
 } from './alpha-vantage';
+import FirebaseFunctionsRateLimiter from 'firebase-functions-rate-limiter';
 
 admin.initializeApp();
 
+const shortTermLimiter = FirebaseFunctionsRateLimiter.withRealtimeDbBackend(
+  {
+    name: 'user_limiter_short_term',
+    maxCalls: 100,
+    periodSeconds: 10,
+  },
+  admin.database()
+);
+
+const longTermLimiter = FirebaseFunctionsRateLimiter.withRealtimeDbBackend(
+  {
+    name: 'user_limiter_long_term',
+    maxCalls: 100000,
+    periodSeconds: 2592000,
+  },
+  admin.database()
+);
+
 const app = express();
 app.use(cors({ origin: '*' }));
+
+app.use(function authInterceptor(req, res, next) {
+  const jwt = req.header('Authorization')?.split('Bearer ')[1];
+  if (!jwt) {
+    res.status(401).send();
+    return;
+  }
+
+  getAuth()
+    .verifyIdToken(jwt, true)
+    .then((decoded) => {
+      req.query['uid'] = decoded.uid;
+      next();
+    })
+    .catch((e) => {
+      console.warn('unauthorized user attempted to call firebase functions', e);
+      res.status(403).send(e?.message || 'Not Authorized');
+    });
+});
+
+app.use(function rateLimter(req, res, next) {
+  const uid = (req.query['uid'] as string) || 'unathorized-user';
+  (async () => {
+    try {
+      await shortTermLimiter.rejectOnQuotaExceededOrRecordUsage(uid);
+    } catch (e) {
+      res
+        .status(403)
+        .send(
+          'Rate Limit Reached for current user, please try again in 10 seconds'
+        );
+    }
+
+    try {
+      await longTermLimiter.rejectOnQuotaExceededOrRecordUsage(uid);
+    } catch (e) {
+      res
+        .status(403)
+        .send(
+          'Over usage detected, you may not use the site for the next 30 days ' +
+            'if you suspect this was in error, please contact the site administrators'
+        );
+    }
+    next();
+  })();
+});
 
 interface AlphaVantageReq {
   symbol: string;
@@ -100,7 +167,9 @@ function handleGenericAlphaVantageReq(
 
 function genericErrorHandler(promise: Promise<any>, res: Response<any>) {
   return promise
-    .then((data) => res.status(200).send(data))
+    .then((data) =>
+      res.status(200).header('Cache-Control', 'max-age=3600').send(data)
+    )
     .catch((e) => {
       console.error(e);
       res.status(e.code || 500).send(e.message);

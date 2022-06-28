@@ -1,9 +1,22 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Nav, Text, Button } from 'grommet';
-import { Analytics, CircleInformation } from 'grommet-icons';
+import { Nav, Text, Button, Menu } from 'grommet';
+import { Analytics, CircleInformation, Menu as MenuIcon } from 'grommet-icons';
 
 const NavBar = () => {
   const navigate = useNavigate();
+
+  const buttons = [
+    {
+      label: 'My Investments',
+      icon: <Analytics />,
+      onClick: () => navigate('/portfolio'),
+    },
+    {
+      label: 'About',
+      icon: <CircleInformation />,
+      onClick: () => navigate('/about'),
+    },
+  ];
 
   return (
     <Nav
@@ -19,16 +32,11 @@ const NavBar = () => {
           Portfolio Planner
         </Link>
       </Text>
-      <Button
-        label="My Investments"
-        icon={<Analytics />}
-        onClick={() => navigate('/portfolio')}
-      />
-      <Button
-        label="About"
-        icon={<CircleInformation />}
-        onClick={() => navigate('/about')}
-      />
+      {screen.width > 600 ? (
+        buttons.map((a) => <Button {...a} key={a.label} />)
+      ) : (
+        <Menu items={buttons} icon={<MenuIcon />} />
+      )}
     </Nav>
   );
 };
