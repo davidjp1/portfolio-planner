@@ -5,7 +5,7 @@ const ejs = require('ejs');
 const { v4: uuidv4 } = require('uuid');
 
 require('dotenv').config({ path: '.env' });
-require('dotenv').config({ path: '.env.local' });
+require('dotenv').config({ path: '.env.local', override: true });
 
 const buildHash = '.' + uuidv4();
 
