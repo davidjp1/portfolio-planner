@@ -10,7 +10,7 @@
 
 ## Setup
 
-- Create a new `.env` file in `/` with the following keys:
+- Update the `.env` file in `/` for the following keys:
 
 ```
 REACT_APP_FUNCTIONS_URL=
