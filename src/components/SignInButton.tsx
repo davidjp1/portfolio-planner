@@ -6,8 +6,6 @@ export const SignInButton = () => {
   const navigate = useNavigate();
   const { user, googleSignIn, googleSignOut } = useUser();
 
-  console.log(user);
-
   const onSignIn = async () => {
     await googleSignIn()
       .then(() => navigate('/portfolio'))
